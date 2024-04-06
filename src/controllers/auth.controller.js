@@ -7,6 +7,10 @@ export const register = async (req,res) =>{
 
     try {
 
+        const userFound = await User.findOne({email});
+
+        if (userFound) return res.status(400).json(["User already exists"]);
+
         const passwordHash = await bcrypt.hash(password,10);
         
         const newUser = new User({
@@ -32,10 +36,7 @@ export const register = async (req,res) =>{
 
     } catch (error) {
 
-        res.status(500).json({
-            message : "Something went wrong",
-            error : error.message
-        });
+        res.status(500).json([error.message]);
     }
 }
 
@@ -45,11 +46,11 @@ export const login = async(req,res)  =>{
     try {
         const userFound =  await User.findOne({email})
 
-        if(!userFound) return res.status(400).json({message : "User not found"});
+        if(!userFound) return res.status(400).json(["User not found"]);
 
         const isMatch = await bcrypt.compare(password,userFound.password);
         
-        if(!isMatch) return res.status(400).json({message : "Invalid credentials"});
+        if(!isMatch) return res.status(400).json(["Invalid credentials"]);
 
         const token = await createAccessToken({id : userFound._id});
 
@@ -66,10 +67,7 @@ export const login = async(req,res)  =>{
 
     } catch (error) {
 
-        res.status(500).json({
-            message : "Something went wrong",
-            error : error.message
-        });
+        res.status(500).json([error.message]);
     }
 }
 
@@ -85,7 +83,7 @@ export const profile = async (req,res)=>{
 
     const userFound = await User.findById(req.user.id);
 
-    if (!userFound) return res.status(400).json({message : "User not found"});
+    if (!userFound) return res.status(400).json( ["User not found"]);
 
     res.json({
         message : "User Profile" ,
