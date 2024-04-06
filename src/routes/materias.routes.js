@@ -1,6 +1,12 @@
 import { Router } from "express";
 import { authRequired } from "../middlewares/validateToken.js";
-import { addMateria, deleteMateria, getMateria, getMaterias, updateMateria } from "../controllers/Materias.controller.js";
+import { 
+    addMateria, 
+    deleteMateria, 
+    getMateria, 
+    getMaterias, 
+    updateMateria 
+} from "../controllers/Materias.controller.js";
 import { validateschema } from "../middlewares/validator.middleware.js";
 import { materiaSchema } from "../schemas/materia.Schema.js";
 

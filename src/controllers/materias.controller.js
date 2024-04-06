@@ -40,11 +40,8 @@ export const addMateria = async(req,res) =>{
 export const updateMateria = async (req,res) =>{
     try {
         const {id} = req.params;
-
         const materia = req.body;
-
         console.log(materia);
-
         const materiaUpdated = await Materia.findByIdAndUpdate(id,materia,{new:true});
 
         res.json({
