@@ -19,4 +19,4 @@ const calificacionSchema = new mongoose.Schema({
     timestamps: true
 });
 
-export default mongoose.model("Calificacion",calificacionSchema);
+export default mongoose.model("Calificaciones",calificacionSchema);

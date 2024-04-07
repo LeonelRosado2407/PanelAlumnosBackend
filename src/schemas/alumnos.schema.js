@@ -1,6 +1,6 @@
 import {z} from "zod";
 
-export const AlumnoSchema = z.object({
+export const alumnoSchema = z.object({
     nombres: z.string({
         required_error: 'Nombres is required'
     }),
