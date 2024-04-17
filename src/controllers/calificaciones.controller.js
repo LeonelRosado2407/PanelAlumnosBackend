@@ -70,6 +70,14 @@ export const addCalificacion = async(req,res) =>{
     try {
         const {alumnoId,materiaId,calificacion} = req.body;
 
+        const calificaionExist = await Calificacion.findOne({alumnoId,materiaId});
+
+        if (calificaionExist != null) {
+            const editCalificacion = await Calificacion.findByIdAndUpdate(calificaionExist._id,{calificacion},{new: true});
+            res.json(["se ha Guadrado la calificacion"]);
+            return;
+        }
+
         const newCalificacion = new Calificacion({
             alumnoId,
             materiaId,
@@ -126,18 +134,34 @@ export const deleteCalificacionesByAlumno = async(req,res) =>{
 const mapearCalificacion = async (calificacion,withAlumno = true) =>{
     const alumno = await Alumno.findById(calificacion.alumnoId);
     const materia = await Materia.findById(calificacion.materiaId);
+    let reprobado = false;
+    let cal = 0;
+    
     if (alumno == null || materia == null) return {alumno : "No encontrado", materia : "No encontrada"};
+    cal = parseInt(calificacion.calificacion);
+
+    if (cal < materia.calificacionAprobatoria) {
+        reprobado = true;
+    }else{
+        reprobado = false;
+    }
 
     if (!withAlumno) {
         return {
+            calificacionId: calificacion._id,
             materia : materia.nombre,
-            calificacion : calificacion.calificacion
+            materiaId: materia._id,
+            calificacion : calificacion.calificacion,
+            reprobado: reprobado
         }
     }
 
     return {
+        calificacionId: calificacion._id,
         alumno : alumno.nombres + " " + alumno.apellidos,
         materia : materia.nombre,
-        calificacion : calificacion.calificacion
+        materiaId: materia._id,
+        calificacion : calificacion.calificacion,
+        reprobado: reprobado
     }
 };

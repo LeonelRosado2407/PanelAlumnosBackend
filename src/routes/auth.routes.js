@@ -16,6 +16,6 @@ router.post("/register", validateschema(registerSchema), register);
 router.post("/login", validateschema(loginSchema), login);
 router.post("/logout",logout); 
 router.get("/profile",authRequired, profile );
-router.get("/auth/verify",veifyToken );
+router.get("/auth/verify",authRequired, veifyToken );
 
 export default router;
